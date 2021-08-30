@@ -128,16 +128,13 @@ def __gdpr__(user_id):
 
 
 __help__ = """
- - /setbio <text>: while replying, will save another user's bio
- - /bio: will get your or another user's bio. This cannot be set by yourself.
- - /setme <text>: will set your info
- - /me: will get your or another user's info
+ - /thongtin: Kiểm tra thông tin
 """
 
-__mod_name__ = "Bios and Abouts"
+__mod_name__ = "Cài thông tin"
 
-SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio)
-GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, pass_args=True)
+SET_BIO_HANDLER = DisableAbleCommandHandler("setdata", set_about_bio)
+GET_BIO_HANDLER = DisableAbleCommandHandler("thongtin", about_bio, pass_args=True)
 
 SET_ABOUT_HANDLER = DisableAbleCommandHandler("setme", set_about_me)
 GET_ABOUT_HANDLER = DisableAbleCommandHandler("me", about_me, pass_args=True)
