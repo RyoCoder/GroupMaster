@@ -13,8 +13,7 @@ from GroupMaster.modules.helper_funcs.extraction import extract_user
 from GroupMaster.modules.helper_funcs.chat_status import is_user_admin, bot_admin, user_admin_no_reply, user_admin, \
     can_restrict
 
-@bot_admin
-@user_admin
+
 @run_async
 def about_me(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message  # type: Optional[Message]
@@ -36,7 +35,8 @@ def about_me(bot: Bot, update: Update, args: List[str]):
     else:
         update.effective_message.reply_text("Bạn chưa đặt thông báo thông tin về bản thân!")
 
-
+@bot_admin
+@user_admin
 @run_async
 def set_about_me(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
