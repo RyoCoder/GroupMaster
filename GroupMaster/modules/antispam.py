@@ -52,19 +52,19 @@ def gban(bot: Bot, update: Update, args: List[str]):
     user_id, reason = extract_user_and_text(message, args)
 
     if not user_id:
-        message.reply_text("You don't seem to be referring to a person.")
+        message.reply_text("Bạn dường như không đề cập đến một người.")
         return
 
     if int(user_id) in SUDO_USERS:
-        message.reply_text("I spy, with my little eye... a sudo user war! Why are you guys turning on each other?")
+        message.reply_text("Tôi theo dõi, với con mắt nhỏ của tôi ... một cuộc chiến người dùng sudo! Tại sao các bạn đang bật nhau?")
         return
 
     if int(user_id) in SUPPORT_USERS:
-        message.reply_text("OOOH someone's trying to gban a support user! *grabs popcorn*")
+        message.reply_text("Oooh ai đó đang cố gắng để người dùng hỗ trợ! *lấy bỏng ngô*")
         return
 
     if user_id == bot.id:
-        message.reply_text("-_- So funny, lets gban myself why don't I? Nice try. Earth That is my price!")
+        message.reply_text("-_- Thật buồn cười, hãy là chính mình tại sao tôi phải không? Hãy thử tốt đẹp. Trái đất là giá của tôi!")
         return
 
     try:
@@ -74,42 +74,42 @@ def gban(bot: Bot, update: Update, args: List[str]):
         return
 
     if user_chat.type != 'private':
-        message.reply_text("That's not a user!")
+        message.reply_text("Đó không phải là người dùng!")
         return
 
     if sql.is_user_gbanned(user_id):
         if not reason:
-            message.reply_text("This person is already gbanned; I'd change the reason, but you haven't given me one...")
+            message.reply_text("Người này đã bị cấm toàn bộ nhóm; Tôi sẽ thay đổi lý do, nhưng bạn đã không cho tôi một ...")
             return
 
         old_reason = sql.update_gban_reason(user_id, user_chat.username or user_chat.first_name, reason)
         if old_reason:
-            message.reply_text("This person is already gbanned, for the following reason:\n"
+            message.reply_text("Người này đã bị cấm, vì lý do sau:\n"
                                "<code>{}</code>\n"
-                               "I've gone and updated it with your new reason!".format(html.escape(old_reason)),
+                               "Tôi đã đi và cập nhật nó với lý do mới của bạn!".format(html.escape(old_reason)),
                                parse_mode=ParseMode.HTML)
         else:
-            message.reply_text("This person is already gbanned, but had no reason set; I've gone and updated it!")
+            message.reply_text("Người này đã bị cấm, nhưng không có lý do nào; Tôi đã đi và cập nhật nó!")
 
         return
     
     ok123 = mention_html(user_chat.id, user_chat.first_name)
 
 
-    text12 = f"*⚡️Another Bitch Goes Off⚡️* RIP {ok123}."
+    text12 = f"⚡️Chuẩn bị đá đít súc vật {ok123}⚡️."
     update.effective_message.reply_text(text12, parse_mode=ParseMode.HTML)
 
     banner = update.effective_user  # type: Optional[User]
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                 "<b>Global Ban</b>" \
+                 "<b>CẤM TOÀN BỘ NHÓM</b>" \
                  "\n#GBAN" \
-                 "\n<b>Status:</b> <code>Enforcing</code>" \
-                 "\n<b>Sudo Admin:</b> {}" \
-                 "\n<b>User:</b> {}" \
+                 "\n<b>Trạng thái:</b> <code>Đang cấm</code>" \
+                 "\n<b>Admin:</b> {}" \
+                 "\n<b>Người dùng:</b> {}" \
                  "\n<b>ID:</b> <code>{}</code>" \
-                 "\n<b>Reason:</b> {}".format(mention_html(banner.id, banner.first_name),
+                 "\n<b>Lý do:</b> {}".format(mention_html(banner.id, banner.first_name),
                                               mention_html(user_chat.id, user_chat.first_name), 
-                                                           user_chat.id, reason or "No reason given"), 
+                                                           user_chat.id, reason or "Không có lí do"), 
                 html=True)
 
     sql.gban_user(user_id, user_chat.username or user_chat.first_name, reason)
@@ -136,9 +136,9 @@ def gban(bot: Bot, update: Update, args: List[str]):
             pass
 
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                   "{} has been successfully gbanned!".format(mention_html(user_chat.id, user_chat.first_name)),
+                   "{} đã bị cấm thành công!".format(mention_html(user_chat.id, user_chat.first_name)),
                    html=True)
-    text13 = f"Successfully gbanned {ok123} 🙂 'He Deserve This'."
+    text13 = f"Cấm {ok123} thành công, đã cấm khỏi 49 nhóm."
     update.effective_message.reply_text(text13, parse_mode=ParseMode.HTML)
 
 
@@ -148,27 +148,27 @@ def ungban(bot: Bot, update: Update, args: List[str]):
 
     user_id = extract_user(message, args)
     if not user_id:
-        message.reply_text("You don't seem to be referring to a person.")
+        message.reply_text("Bạn dường như không đề cập đến một người.")
         return
 
     user_chat = bot.get_chat(user_id)
     if user_chat.type != 'private':
-        message.reply_text("That's not a person!")
+        message.reply_text("Đó không phải là một người!")
         return
 
     if not sql.is_user_gbanned(user_id):
-        message.reply_text("This person is not gbanned!")
+        message.reply_text("Người này không bị cấm!")
         return
 
     banner = update.effective_user  # type: Optional[User]
 
-    message.reply_text("I'll give {} a second chance, globally.I do not ask for your trust.I demand only your obedience.".format(user_chat.first_name))
+    message.reply_text("Tô sẽ cho {} một cơ hội thứ hai, toàn cầu. Tôi không yêu cầu sự tin tưởng của bạn. Tôi chỉ yêu cầu sự vâng lời của bạn.".format(user_chat.first_name))
 
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                 "<b>Regression of Global Ban</b>" \
+                 "<b>GỠ CẤM TOÀN BỘ NHÓM</b>" \
                  "\n#UNGBAN" \
-                 "\n<b>Status:</b> <code>Ceased</code>" \
-                 "\n<b>Sudo Admin:</b> {}" \
+                 "\n<b>Status:</b> <code>Chấm dứt</code>" \
+                 "\n<b>Admin:</b> {}" \
                  "\n<b>User:</b> {}" \
                  "\n<b>ID:</b> <code>{}</code>".format(mention_html(banner.id, banner.first_name),
                                                        mention_html(user_chat.id, user_chat.first_name), 
@@ -201,11 +201,11 @@ def ungban(bot: Bot, update: Update, args: List[str]):
     sql.ungban_user(user_id)
 
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                  "{} has been successfully un-gbanned!".format(mention_html(user_chat.id,
+                  "{} đã được bỏ cấm thành công!".format(mention_html(user_chat.id,
                                                                          user_chat.first_name)),
                  html=True)
 
-    message.reply_text("Person has been un-gbanned.The hardest choices require the strongest wills.😐")
+    message.reply_text("Người đã bị cấm. Lựa chọn khó nhất đòi hỏi ý chí mạnh nhất. 😐")
 
 
 
@@ -214,7 +214,7 @@ def gbanlist(bot: Bot, update: Update):
     banned_users = sql.get_gban_list()
 
     if not banned_users:
-        update.effective_message.reply_text("There aren't any gbanned users! You're kinder than I expected...")
+        update.effective_message.reply_text("Không có bất kỳ người dùng bị cấm! Bạn tốt hơn tôi mong đợi ...")
         return
 
     banfile = 'Screw these guys.\n'
@@ -233,7 +233,7 @@ def check_and_ban(update, user_id, should_message=True):
     if sql.is_user_gbanned(user_id):
         update.effective_chat.kick_member(user_id)
         if should_message:
-            update.effective_message.reply_text("Again, insects, you ask what am I? What I am is angry. What I am is insane with rage!")
+            update.effective_message.reply_text("Con súc vật này cút ra khỏi nhóm của bố ngay!")
 
 #GMUTE
 
@@ -244,19 +244,19 @@ def gmute(bot: Bot, update: Update, args: List[str]):
     user_id, reason = extract_user_and_text(message, args)
 
     if not user_id:
-        message.reply_text("You don't seem to be referring to a person.")
+        message.reply_text("Bạn dường như không đề cập đến một người.")
         return
 
     if int(user_id) in SUDO_USERS:
-        message.reply_text("I spy, with my little eye... a sudo user war! Why are you guys turning on each other?")
+        message.reply_text("Tôi theo dõi, với con mắt nhỏ của tôi ... một cuộc chiến người dùng sudo! Tại sao các bạn đang bật nhau?")
         return
 
     if int(user_id) in SUPPORT_USERS:
-        message.reply_text("OOOH someone's trying to gmute a support user! *grabs popcorn*")
+        message.reply_text("Oooh ai đó đang cố gắng gmute một người dùng hỗ trợ! *lấy bỏng ngô*")
         return
 
     if user_id == bot.id:
-        message.reply_text("-_- So funny, lets gmute myself why don't I? Nice try.")
+        message.reply_text("-_- Thật buồn cười, hãy tắt tiếng chính mình Tại sao phải không? Hãy thử tốt đẹp.")
         return
 
     try:
@@ -266,30 +266,30 @@ def gmute(bot: Bot, update: Update, args: List[str]):
         return
 
     if user_chat.type != 'private':
-        message.reply_text("That's not a user!")
+        message.reply_text("Đó không phải là người dùng!")
         return
 
     if sql.is_user_gmuted(user_id):
         if not reason:
-            message.reply_text("This user is already gmuted; I'd change the reason, but you haven't given me one...")
+            message.reply_text("Người dùng này đã bị tắt tiếng; Tôi sẽ thay đổi lý do, nhưng bạn đã không cho tôi một ...")
             return
 
         success = sql.update_gmute_reason(user_id, user_chat.username or user_chat.first_name, reason)
         if success:
-            message.reply_text("This user is already gmuted; I've gone and updated the gmute reason though!")
+            message.reply_text("Người dùng này đã bị tắt tiếng; Tôi đã đi và cập nhật lý do GMUTE!")
         else:
-            message.reply_text("Do you mind trying again? I thought this person was gmuted, but then they weren't? "
-                               "Am very confused")
+            message.reply_text("Bạn có phiền thử lại không? Tôi nghĩ rằng người này đã bị tắt tiếng, nhưng sau đó họ không? "
+                               "Tôi rất bối rối")
 
         return
 
-    message.reply_text("*Gets duct tape ready* 😉")
+    message.reply_text("*Tiểu nhị, chuẩn bị băng keo* 😉")
 
     muter = update.effective_user  # type: Optional[User]
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                 "{} is gmuting user {} "
-                 "because:\n{}".format(mention_html(muter.id, muter.first_name),
-                                       mention_html(user_chat.id, user_chat.first_name), reason or "No reason given"),
+                 "{} đã tắt chat {} "
+                 "tại vì:\n{}".format(mention_html(muter.id, muter.first_name),
+                                       mention_html(user_chat.id, user_chat.first_name), reason or "Thích"),
                  html=True)
 
     sql.gmute_user(user_id, user_chat.username or user_chat.first_name, reason)
@@ -335,8 +335,8 @@ def gmute(bot: Bot, update: Update, args: List[str]):
         except TelegramError:
             pass
 
-    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "gmute complete!")
-    message.reply_text("Person has been gmuted.")
+    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "GMUTE HOÀN THÀNH!")
+    message.reply_text("Người này đã bị gmuted.")
 
 
 @run_async
@@ -345,24 +345,24 @@ def ungmute(bot: Bot, update: Update, args: List[str]):
 
     user_id = extract_user(message, args)
     if not user_id:
-        message.reply_text("You don't seem to be referring to a user.")
+        message.reply_text("Bạn dường như không đề cập đến một người dùng.")
         return
 
     user_chat = bot.get_chat(user_id)
     if user_chat.type != 'private':
-        message.reply_text("That's not a user!")
+        message.reply_text("Đó không phải là người dùng!")
         return
 
     if not sql.is_user_gmuted(user_id):
-        message.reply_text("This user is not gmuted!")
+        message.reply_text("Người dùng này không bị Gmuted!")
         return
 
     muter = update.effective_user  # type: Optional[User]
 
-    message.reply_text("I'll let {} speak again, globally.".format(user_chat.first_name))
+    message.reply_text("Tôi sẽ cho phép {} chat lại, toàn cầu.".format(user_chat.first_name))
 
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                 "{} has ungmuted user {}".format(mention_html(muter.id, muter.first_name),
+                 "{} có người dùng không khéo léo {}".format(mention_html(muter.id, muter.first_name),
                                                    mention_html(user_chat.id, user_chat.first_name)),
                  html=True)
 
@@ -409,9 +409,9 @@ def ungmute(bot: Bot, update: Update, args: List[str]):
 
     sql.ungmute_user(user_id)
 
-    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "un-gmute complete!")
+    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "Un-gmute hoàn thành!")
 
-    message.reply_text("Person has been un-gmuted.")
+    message.reply_text("Người đã không được unmute")
 
 
 @run_async
@@ -419,7 +419,7 @@ def gmutelist(bot: Bot, update: Update):
     muted_users = sql.get_gmute_list()
 
     if not muted_users:
-        update.effective_message.reply_text("There aren't any gmuted users! You're kinder than I expected...")
+        update.effective_message.reply_text("Không có bất kỳ người dùng Gmuted nào! Bạn tốt hơn tôi mong đợi ...")
         return
 
     mutefile = 'Screw these guys.\n'
@@ -431,7 +431,7 @@ def gmutelist(bot: Bot, update: Update):
     with BytesIO(str.encode(mutefile)) as output:
         output.name = "gmutelist.txt"
         update.effective_message.reply_document(document=output, filename="gmutelist.txt",
-                                                caption="Here is the list of currently gmuted users.")
+                                                caption="Dưới đây là danh sách những người dùng hiện đang được Gmuted.")
 
 
 def check_and_mute(bot, update, user_id, should_message=True):
@@ -490,18 +490,18 @@ def antispam(bot: Bot, update: Update, args: List[str]):
     if len(args) > 0:
         if args[0].lower() in ["on", "yes"]:
             sql.enable_antispam(chat.id)
-            update.effective_message.reply_text(tld(chat.id, "I've enabled antispam security in this group. This will help protect you "
-                                                "from spammers, unsavoury characters, and the biggest trolls."))
+            update.effective_message.reply_text(tld(chat.id, "Tôi đã kích hoạt an ninh Antispam trong nhóm này. Điều này sẽ giúp bảo vệ bạn "
+                                                "từ những kẻ gửi thư rác, nhân vật không đáng kính và những con troll lớn nhất."))
         elif args[0].lower() in ["off", "no"]:
             sql.disable_antispam(chat.id)
-            update.effective_message.reply_text(tld(chat.id, "I've disabled antispam security in this group. GBans wont affect your users "
-                                                "anymore. You'll be less protected from any trolls and spammers "
-                                                "though! And i am little disappointed too. 😶"))
+            update.effective_message.reply_text(tld(chat.id, "Tôi đã vô hiệu hóa an ninh Antispam trong nhóm này. GBANS sẽ không ảnh hưởng đến người dùng của bạn "
+                                                "nữa không. Bạn sẽ ít được bảo vệ khỏi bất kỳ troll và kẻ gửi thư rác "
+                                                "mặc dù! Và tôi hơi thất vọng quá. 😶"))
     else:
-        update.effective_message.reply_text(tld(chat.id, "Give me some arguments to choose a setting! on/off, yes/no!\n\n"
-                                            "Your current setting is: {}\n"
-                                            "When True, any gbans that happen will also happen in your group. "
-                                            "When False, they won't, leaving you at the possible mercy of "
+        update.effective_message.reply_text(tld(chat.id, "Hãy cho tôi một số đối số để chọn một thiết lập! on/off, yes/no!\n\n"
+                                            "Cài đặt hiện tại của bạn là: {}\n"
+                                            "Khi True, Bất kỳ GBAN nào xảy ra cũng sẽ xảy ra trong nhóm của bạn. "
+                                            "Khi False, họ sẽ không, để lại cho bạn sự thương xót có thể "
                                             "spammers.").format(sql.does_chat_gban(chat.id)))
 
 #Gkick
@@ -532,13 +532,13 @@ def gkick(bot: Bot, update: Update, args: List[str]):
         if excp.message in GKICK_ERRORS:
             pass
         else:
-            message.reply_text("User cannot be Globally kicked because: {}".format(excp.message))
+            message.reply_text("Người dùng không thể bị đá trên toàn cầu vì: {}".format(excp.message))
             return
     except TelegramError:
             pass
 
     if not user_id:
-        message.reply_text("You do not seems to be referring to a person")
+        message.reply_text("Bạn dường như không được đề cập đến một người")
         return
     if int(user_id) in SUDO_USERS or int(user_id) in SUPPORT_USERS:
         message.reply_text("OHHH! Someone's trying to gkick a sudo/support user! *Grabs popcorn*")
@@ -548,7 +548,7 @@ def gkick(bot: Bot, update: Update, args: List[str]):
         return
         
     if user_id == bot.id:
-        message.reply_text("Well, I'm not gonna gkick myself!")
+        message.reply_text("Chà, tôi sẽ không tự Gkick!")
         return
 
     if int(user_id) in SUDO_USERS:
@@ -556,7 +556,7 @@ def gkick(bot: Bot, update: Update, args: List[str]):
         return
 
     chats = get_all_chats()
-    message.reply_text("Globally kicking person @{}".format(user_chat.username))
+    message.reply_text("Đá @{} khỏi toàn bộ nhóm".format(user_chat.username))
     for chat in chats:
         try:
             bot.unban_chat_member(chat.chat_id, user_id)  # Unban_member = kick (and not ban)
@@ -564,14 +564,14 @@ def gkick(bot: Bot, update: Update, args: List[str]):
             if excp.message in GKICK_ERRORS:
                 pass
             else:
-                message.reply_text("Person cannot be Globally kicked because: {}".format(excp.message))
+                message.reply_text("Người không thể bị đá trên toàn cầu vì: {}".format(excp.message))
                 return
         except TelegramError:
             pass
 
 
 def __stats__():
-    return "{} gbanned users.\n{} gmuted users.".format(sql.num_gbanned_users(), sql.num_gmuted_users())
+    return "{} cấm toàn cầu.\n{} tắt chát toàn cầu.".format(sql.num_gbanned_users(), sql.num_gmuted_users())
     
 
 
@@ -581,21 +581,21 @@ def __user_info__(user_id, chat_id):
 
     if not user_id in SUDO_USERS:
 
-        text = tld(chat_id, "Globally banned: <b>{}</b>")
+        text = tld(chat_id, "Cấm toàn cầu: <b>{}</b>")
         if is_gbanned:
             text = text.format(tld(chat_id, "Yes"))
             user = sql.get_gbanned_user(user_id)
             if user.reason:
-                text += tld(chat_id, "\nReason: {}").format(html.escape(user.reason))
+                text += tld(chat_id, "\nLý do: {}").format(html.escape(user.reason))
         else:
             text = text.format(tld(chat_id, "No"))
         
-        text += tld(chat_id, "\nGlobally muted: <b>{}</b>")
+        text += tld(chat_id, "\nTắt chat toàn cầu: <b>{}</b>")
         if is_gmuted:
             text = text.format(tld(chat_id, "Yes"))
             user = sql.get_gmuted_user(user_id)
             if user.reason:
-                text += tld(chat_id, "\nReason: {}").format(html.escape(user.reason))
+                text += tld(chat_id, "\nLý do: {}").format(html.escape(user.reason))
         else:
             text = text.format(tld(chat_id, "No"))
 
@@ -610,19 +610,19 @@ def __migrate__(old_chat_id, new_chat_id):
 
 def __chat_settings__(bot, update, chat, chatP, user):
     chat_id = chat.id
-    return "This chat is enforcing *gbans*: `{}`.".format(sql.does_chat_gban(chat_id))
+    return "Trò chuyện này đang thực thi *GBAN*: `{}`.".format(sql.does_chat_gban(chat_id))
 
 
 __help__ = """
 *Admin only:*
- - /antispam <on/off/yes/no>: Will disable antispam security in group, or return your current settings.
+ - /antispam <on/off/yes/no>: Sẽ vô hiệu hóa an ninh Antispam trong nhóm hoặc trả về cài đặt hiện tại của bạn.
 
-Antispam are used by the bot owners to ban spammers across all groups. This helps protect \
-you and your groups by removing spam flooders as quickly as possible. They can be disabled for you group by calling \
+Antispam được sử dụng bởi các chủ sở hữu bot để cấm những kẻ gửi thư rác trên tất cả các nhóm. Điều này giúp bảo vệ \
+Bạn và các nhóm của bạn bằng cách loại bỏ lũ spam càng nhanh càng tốt. Họ có thể bị vô hiệu hóa cho nhóm bạn bằng cách gọi \
 /antispam
 """
 
-__mod_name__ = "Antispam security"
+__mod_name__ = "Antispam 👿"
 
 ANTISPAM_STATUS = CommandHandler("antispam", antispam, pass_args=True, filters=Filters.group)
 
