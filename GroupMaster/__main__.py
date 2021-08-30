@@ -20,15 +20,9 @@ from GroupMaster.modules.helper_funcs.misc import paginate_modules
 from GroupMaster.modules.translations.strings import tld, tld_help 
 from GroupMaster.modules.connection import connected
 
-PM_START = """Hello {} 👋
+PM_START = """Hello {} 👋 I'm  {} 
 
-I'm  {} 🇱🇰
-
-I can Manage your groups with more functions 😏
-
-Click /help or Help button below to find out more about how to use me to my full potential 🙂
-
-Leo Projects 🇱🇰
+Đây là bot quản lý group của owohub 😏
 """
 
 
