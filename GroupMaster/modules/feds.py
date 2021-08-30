@@ -30,12 +30,10 @@ import GroupMaster.modules.sql.feds_sql as sql
 # Federation update v2 by Ayra Hikari 2019
 #
 # Time spended on feds = 10h by #MrYacha
-# Time spended on reworking on the whole feds = 22+ hours by @RealAkito
-# Time spended on updating version to v2 = 26+ hours by @AyraHikari
 #
 # Total spended for making this features is 68+ hours
 
-LOGGER.info("Original federation module by MrYacha, reworked by Mizukito Akito (@RealAkito) on Telegram.")
+LOGGER.info("Original federation module by MrYacha, reworked by Mizukito Akito (@owohub) on Telegram.")
 
 
 FBAN_ERRORS = {
@@ -83,7 +81,7 @@ def new_fed(bot: Bot, update: Update):
 
 		x = sql.new_fed(user.id, fed_name, fed_id)
 		if not x:
-			update.effective_message.reply_text("Federation creation failed! Keep in the mind that this rarely happened! Ask in @leosupportx for help!")
+			update.effective_message.reply_text("Federation creation failed! Keep in the mind that this rarely happened! Ask in @owohub for help!")
 			return
 
 		update.effective_message.reply_text("*You have successfully created a new federation!*"\
@@ -451,7 +449,7 @@ def fed_ban(bot: Bot, update: Update, args: List[str]):
 			return
 		x = sql.fban_user(fed_id, user_id, user_chat.first_name, user_chat.last_name, user_chat.username, reason)
 		if not x:
-			message.reply_text("Failed to ban from the federation! If this problem continues, contact @onepunchsupport.")
+			message.reply_text("Failed to ban from the federation! If this problem continues, contact @owohub.")
 			return
 
 		fed_chats = sql.all_fed_chats(fed_id)
@@ -490,7 +488,7 @@ def fed_ban(bot: Bot, update: Update, args: List[str]):
 
 	x = sql.fban_user(fed_id, user_id, user_chat.first_name, user_chat.last_name, user_chat.username, reason)
 	if not x:
-		message.reply_text("Failed to ban from the federation! If this problem continues, contact @onepunchsupport.")
+		message.reply_text("Failed to ban from the federation! If this problem continues, contact @owohub.")
 		return
 
 	fed_chats = sql.all_fed_chats(fed_id)
@@ -633,7 +631,7 @@ def set_frules(bot: Bot, update: Update, args: List[str]):
 			markdown_rules = markdown_parser(txt, entities=msg.parse_entities(), offset=offset)
 		x = sql.set_frules(fed_id, markdown_rules)
 		if not x:
-			update.effective_message.reply_text("Big F! There is an error while setting federation rules! If you wondered why please ask it in @onepunchsupport !")
+			update.effective_message.reply_text("Big F! There is an error while setting federation rules! If you wondered why please ask it in @owohub !")
 			return
 
 		rules = sql.get_fed_info(fed_id)['frules']
