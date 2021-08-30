@@ -141,14 +141,14 @@ def send_start(bot, update):
     text = PM_START
 
     
-    keyboard = [[InlineKeyboardButton(text="🇱🇰 Language", callback_data="set_lang_")]]
-    keyboard += [[InlineKeyboardButton(text="🛠 Reporting", callback_data="cntrl_panel_M"), 
-        InlineKeyboardButton(text="❔ Help", callback_data="help_back")]]
+    keyboard = [[InlineKeyboardButton(text="Ngôn ngữ", callback_data="set_lang_")]]
+    keyboard += [[InlineKeyboardButton(text="Báo cáo", callback_data="cntrl_panel_M"), 
+        InlineKeyboardButton(text="Trợ giúp", callback_data="help_back")]]
 
-    keyboard += [[InlineKeyboardButton(text="Updates Channel 🗣", url="t.me/new_ehi"),
-        InlineKeyboardButton(text="Support Group 👥", url="t.me/leosupportx")]]
+    keyboard += [[InlineKeyboardButton(text="Kênh 🗣", url="t.me/owogram"),
+        InlineKeyboardButton(text="Nhóm 👥", url="t.me/owohub")]]
     
-    keyboard += [[InlineKeyboardButton(text="➕ Add me to your group ➕", url="t.me/groupmasternaviya_bot?startgroup=true")]]
+  #  keyboard += [[InlineKeyboardButton(text="➕ Add me to your group ➕", url="t.me/groupmasternaviya_bot?startgroup=true")]]
 
     update.effective_message.reply_text(PM_START.format(escape_markdown(first_name), bot.first_name), reply_markup=InlineKeyboardMarkup(keyboard), disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN)
 
