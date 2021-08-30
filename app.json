@@ -68,6 +68,10 @@
     "BAN_STICKER": {
       "description": "Which sticker to use when banning people. Use https://telegram.dog/ShowJsonBot to get the file_id",
       "value": "CAADBQADNwEAAjZzSxRZAc49mnFSSAI"
+    },
+    "NO_LOAD": {
+      "description": "noload",
+      "value": "muting warns afk android antiflood backups bans feds locks notes"
     }
   },
   "addons": [
