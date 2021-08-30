@@ -10,8 +10,11 @@ import GroupMaster.modules.sql.userinfo_sql as sql
 from GroupMaster import dispatcher, SUDO_USERS, OWNER_ID
 from GroupMaster.modules.disable import DisableAbleCommandHandler
 from GroupMaster.modules.helper_funcs.extraction import extract_user
+from GroupMaster.modules.helper_funcs.chat_status import is_user_admin, bot_admin, user_admin_no_reply, user_admin, \
+    can_restrict
 
-
+@bot_admin
+@user_admin
 @run_async
 def about_me(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message  # type: Optional[Message]
@@ -29,9 +32,9 @@ def about_me(bot: Bot, update: Update, args: List[str]):
                                             parse_mode=ParseMode.MARKDOWN)
     elif message.reply_to_message:
         username = message.reply_to_message.from_user.first_name
-        update.effective_message.reply_text(username + " hasn't set an info message about themselves  yet!")
+        update.effective_message.reply_text(username + " Chưa đặt thông điệp thông tin về bản thân!")
     else:
-        update.effective_message.reply_text("You haven't set an info message about yourself yet!")
+        update.effective_message.reply_text("Bạn chưa đặt thông báo thông tin về bản thân!")
 
 
 @run_async
@@ -43,10 +46,10 @@ def set_about_me(bot: Bot, update: Update):
     if len(info) == 2:
         if len(info[1]) < MAX_MESSAGE_LENGTH // 4:
             sql.set_user_me_info(user_id, info[1])
-            message.reply_text("Updated your info!")
+            message.reply_text("Cập nhật thông tin của bạn!")
         else:
             message.reply_text(
-                "Your info needs to be under {} characters! You have {}.".format(MAX_MESSAGE_LENGTH // 4, len(info[1])))
+                "Thông tin của bạn cần phải được dưới {} characters! You have {}.".format(MAX_MESSAGE_LENGTH // 4, len(info[1])))
 
 
 @run_async
@@ -62,15 +65,16 @@ def about_bio(bot: Bot, update: Update, args: List[str]):
     info = sql.get_user_bio(user.id)
 
     if info:
-        update.effective_message.reply_text("*{}*:\n{}".format(user.first_name, escape_markdown(info)),
+        update.effective_message.reply_text("*Thông tin về {}*:\n{}".format(user.first_name, escape_markdown(info)),
                                             parse_mode=ParseMode.MARKDOWN)
     elif message.reply_to_message:
         username = user.first_name
-        update.effective_message.reply_text("{} hasn't had a message set about themselves yet!".format(username))
+        update.effective_message.reply_text("{} chưa có một tin nhắn nào về bản thân!".format(username))
     else:
-        update.effective_message.reply_text("You haven't had a bio set about yourself yet!")
+        update.effective_message.reply_text("Bạn chưa có một bộ sinh học về bản thân bạn!")
 
-
+@bot_admin
+@user_admin
 @run_async
 def set_about_bio(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
@@ -79,16 +83,16 @@ def set_about_bio(bot: Bot, update: Update):
         repl_message = message.reply_to_message
         user_id = repl_message.from_user.id
         if user_id == message.from_user.id:
-            message.reply_text("Ha, you can't set your own bio! You're at the mercy of others here...")
+            message.reply_text("Ha, bạn không thể đặt Bio của riêng bạn! Bạn đang ở sự thương xót của những người khác ở đây ...")
             return
         elif user_id == bot.id and sender.id not in SUDO_USERS:
-            message.reply_text("Erm... yeah, I only trust sudo users to set my bio LMAO.")
+            message.reply_text("Erm ... Ừ, tôi chỉ tin tưởng người dùng sudo để đặt bio lmao của tôi.")
             return
         elif user_id in SUDO_USERS and sender.id not in SUDO_USERS:
-            message.reply_text("Erm... yeah, I only trust sudo users to set sudo users bio LMAO.")
+            message.reply_text("Erm ... yeah, tôi chỉ tin tưởng người dùng sudo để thiết lập người dùng sudo bio lmao.")
             return
         elif user_id == OWNER_ID:
-            message.reply_text("You ain't setting my master bio LMAO.")
+            message.reply_text("Bạn không đặt bậc thầy bio lmao.")
             return
 
         text = message.text
@@ -96,13 +100,13 @@ def set_about_bio(bot: Bot, update: Update):
         if len(bio) == 2:
             if len(bio[1]) < MAX_MESSAGE_LENGTH // 4:
                 sql.set_user_bio(user_id, bio[1])
-                message.reply_text("Updated {}'s bio!".format(repl_message.from_user.first_name))
+                message.reply_text("Updated thông tin cho {}!".format(repl_message.from_user.first_name))
             else:
                 message.reply_text(
-                    "A bio needs to be under {} characters! You tried to set {}.".format(
+                    "Một sinh học cần phải được dưới {} nhân vật! Bạn đã cố gắng để thiết lập {}.".format(
                         MAX_MESSAGE_LENGTH // 4, len(bio[1])))
     else:
-        message.reply_text("Reply to someone's message to set their bio!")
+        message.reply_text("Trả lời tin nhắn của ai đó để đặt thông tin của họ!")
 
 
 def __user_info__(user_id, chat_id):
