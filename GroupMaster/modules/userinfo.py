@@ -69,9 +69,9 @@ def about_bio(bot: Bot, update: Update, args: List[str]):
                                             parse_mode=ParseMode.MARKDOWN)
     elif message.reply_to_message:
         username = user.first_name
-        update.effective_message.reply_text("{} chưa có một tin nhắn nào về bản thân!".format(username))
+        update.effective_message.reply_text("{} chưa được xác minh!".format(username))
     else:
-        update.effective_message.reply_text("Bạn chưa có một bộ sinh học về bản thân bạn!")
+        update.effective_message.reply_text("Bạn chưa được xác minh!")
 
 @bot_admin
 @user_admin
