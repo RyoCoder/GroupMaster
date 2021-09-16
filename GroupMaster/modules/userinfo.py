@@ -10,7 +10,7 @@ import GroupMaster.modules.sql.userinfo_sql as sql
 from GroupMaster import dispatcher, SUDO_USERS, OWNER_ID
 from GroupMaster.modules.disable import DisableAbleCommandHandler
 from GroupMaster.modules.helper_funcs.extraction import extract_user
-from GroupMaster.modules.helper_funcs.chat_status import is_user_admin, bot_admin, user_admin_no_reply, user_admin, \
+from GroupMaster.modules.helper_funcs.chat_status import is_user_admin, bot_admin, user_admin_no_reply, user_admin, sudo_plus \
     can_restrict
 
 
@@ -36,7 +36,7 @@ def about_me(bot: Bot, update: Update, args: List[str]):
         update.effective_message.reply_text("Bạn chưa đặt thông báo thông tin về bản thân!")
 
 @bot_admin
-@user_admin
+@sudo_plus
 @run_async
 def set_about_me(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
@@ -74,7 +74,7 @@ def about_bio(bot: Bot, update: Update, args: List[str]):
         update.effective_message.reply_text("Bạn chưa được xác minh!")
 
 @bot_admin
-@user_admin
+@sudo_plus
 @run_async
 def set_about_bio(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
