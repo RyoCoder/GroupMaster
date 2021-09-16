@@ -24,9 +24,6 @@ def is_user_ban_protected(chat: Chat, user_id: int, member: ChatMember = None) -
         member = chat.get_member(user_id)
     return member.status in ('administrator', 'creator')
 
-def is_sudo_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
-    return user_id in SUDO_USERS
-
 def is_user_admin(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     if chat.type == 'private' \
             or user_id in SUDO_USERS \
@@ -167,25 +164,3 @@ def user_is_gbanned(func):
             pass
     return is_user_gbanned
 
-def sudo_plus(func):
-    @wraps(func)
-    def is_sudo_plus_func(update: Update, context: CallbackContext, *args, **kwargs):
-        bot = context.bot
-        user = update.effective_user
-        chat = update.effective_chat
-
-        if user and is_sudo_plus(chat, user.id):
-            return func(update, context, *args, **kwargs)
-        elif not user:
-            pass
-        elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                update.effective_message.delete()
-            except:
-                pass
-        else:
-            update.effective_message.reply_text(
-                "Bạn không phải quản trị viên cho tôi biết phải làm gì? Bạn muốn một cú đấm?",
-            )
-
-    return is_sudo_plus_func
