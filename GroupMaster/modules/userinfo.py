@@ -36,7 +36,7 @@ def about_me(bot: Bot, update: Update, args: List[str]):
         update.effective_message.reply_text("Bạn chưa đặt thông báo thông tin về bản thân!")
 
 @bot_admin
-@is_user_admin
+@user_admin
 @run_async
 def set_about_me(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
@@ -74,7 +74,7 @@ def about_bio(bot: Bot, update: Update, args: List[str]):
         update.effective_message.reply_text("Bạn chưa được xác minh!")
 
 @bot_admin
-@is_user_admin
+@user_admin
 @run_async
 def set_about_bio(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
