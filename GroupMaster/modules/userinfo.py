@@ -10,7 +10,7 @@ import GroupMaster.modules.sql.userinfo_sql as sql
 from GroupMaster import dispatcher, SUDO_USERS, OWNER_ID
 from GroupMaster.modules.disable import DisableAbleCommandHandler
 from GroupMaster.modules.helper_funcs.extraction import extract_user
-from GroupMaster.modules.helper_funcs.chat_status import is_user_admin, bot_admin, user_admin_no_reply, user_admin, sudo_plus, \
+from GroupMaster.modules.helper_funcs.chat_status import is_user_admin, bot_admin, user_admin_no_reply, user_admin, \
     can_restrict
 
 
@@ -36,7 +36,7 @@ def about_me(bot: Bot, update: Update, args: List[str]):
         update.effective_message.reply_text("Bạn chưa đặt thông báo thông tin về bản thân!")
 
 @bot_admin
-@sudo_plus
+@is_user_admin
 @run_async
 def set_about_me(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
@@ -74,7 +74,7 @@ def about_bio(bot: Bot, update: Update, args: List[str]):
         update.effective_message.reply_text("Bạn chưa được xác minh!")
 
 @bot_admin
-@sudo_plus
+@is_user_admin
 @run_async
 def set_about_bio(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
@@ -100,7 +100,7 @@ def set_about_bio(bot: Bot, update: Update):
         if len(bio) == 2:
             if len(bio[1]) < MAX_MESSAGE_LENGTH // 4:
                 sql.set_user_bio(user_id, bio[1])
-                message.reply_text("Updated thông tin cho {}!".format(repl_message.from_user.first_name))
+                message.reply_text("{} đã được xác minh thành công!".format(repl_message.from_user.first_name))
             else:
                 message.reply_text(
                     "Một sinh học cần phải được dưới {} nhân vật! Bạn đã cố gắng để thiết lập {}.".format(
